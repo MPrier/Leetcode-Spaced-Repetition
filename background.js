@@ -12,8 +12,24 @@ chrome.webRequest.onCompleted.addListener(
                 type: "popup",
                 width: 400,
                 height: 600
-            });
+            }, (newWindow) => {
+                console.log('Popup opened, window ID:', newWindow.id);
+                chrome.storage.local.set({ popupWindowId: newWindow.id });
+              });
         }
     },
     { urls: ["*://leetcode.com/*"] }
 );
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action == 'storeResponse') {
+        console.log(request.option);
+        
+        chrome.storage.local.get('popupWindowId', (data) => {
+            if (data.popupWindowId) {
+              chrome.windows.remove(data.popupWindowId);
+              console.log('Popup closed, window ID:', data.popupWindowId);
+            }
+          });
+    }
+});
