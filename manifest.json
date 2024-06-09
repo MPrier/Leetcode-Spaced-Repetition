@@ -19,7 +19,11 @@
             "js": ["content.js"]
         }
     ],
+    "icons": {
+        "128": "images/logo3.png"
+    },
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_icon": "images/logo3.png"
     }
 }
