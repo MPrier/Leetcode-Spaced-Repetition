@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 li.appendChild(a);
                 li.appendChild(document.createTextNode(`, Difficulty: ${element.difficulty}`));
+                li.appendChild(document.createTextNode(`, Date: ${element.submitDate}`));
                 objectList.appendChild(li);
             }
         });
