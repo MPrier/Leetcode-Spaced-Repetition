@@ -35,8 +35,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 var completedProblemList = result.completedProblemList;
                 var problemId = data.lastProblemSubmitted;
                 var date = new Date();
+                console.log(date.toDateString())
                 var currentDate = JSON.stringify(date)
-                completedProblemList.push({problemId: problemId, difficulty: request.option, submitDate: currentDate});
+                completedProblemList.push({problemId: problemId, difficulty: request.option, formatedSubmitDate: currentDate, unformatedSubmitDate: date});
                 console.log(completedProblemList);
                 chrome.storage.local.set({completedProblemList: completedProblemList});
             })
@@ -48,5 +49,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               console.log('Popup closed, window ID:', data.popupWindowId);
             }
           });
+    }
+    else if (request.action == 'clear') {
+        chrome.storage.local.set({completedProblemList: []})
     }
 });
