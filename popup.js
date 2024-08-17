@@ -7,13 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
         var completedProblemList = result.completedProblemList;
         
         completedProblemList.forEach((element, index) => {
-            
+            const li = document.createElement('li');
+            const div = document.createElement('div');
             if (element.unformatedSubmitDate != undefined) {
                 var today = new Date();
                 var submitDate = new Date(element.unformatedSubmitDate)
                 
                 console.log("Todays Date: " + today)
                 console.log("Submit Date: " + submitDate)
+                var minutes = calculateDate(today, submitDate)
+                if ( minutes > 120) {
+                    li.appendChild(document.createTextNode(`${element.problemId}: minutes: ${minutes}`));
+                    objectList.appendChild(li);
+                }
             }    
         });
     });
@@ -53,4 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleClearHisotry() {
     chrome.runtime.sendMessage({ action: 'clear'});
     window.location.reload();
+  }
+
+  function calculateDate(today, submitDate) {
+    let difference_in_time = today.getTime() - submitDate.getTime();
+    console.log("Time difference: " + (difference_in_time / 1000) / 60)
+    return (difference_in_time / 1000) / 60
   }
