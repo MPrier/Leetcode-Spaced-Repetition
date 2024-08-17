@@ -36,8 +36,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 var problemId = data.lastProblemSubmitted;
                 var date = new Date();
                 console.log(date.toDateString())
-                var currentDate = JSON.stringify(date)
-                completedProblemList.push({problemId: problemId, difficulty: request.option, formatedSubmitDate: currentDate, unformatedSubmitDate: date});
+                var currentDate = date.toDateString()
+
+                completedProblemList.push({
+                    problemId: problemId,
+                    difficulty: request.option, 
+                    formatedSubmitDate: currentDate, 
+                    unformatedSubmitDate: date.toString(),
+                });
                 console.log(completedProblemList);
                 chrome.storage.local.set({completedProblemList: completedProblemList});
             })
