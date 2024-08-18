@@ -9,17 +9,22 @@ document.addEventListener('DOMContentLoaded', () => {
         completedProblemList.forEach((element, index) => {
             const li = document.createElement('li');
             const div = document.createElement('div');
-            if (element.unformatedSubmitDate != undefined) {
+            var today = new Date();
+            var rev = new Date(element.nextReviewDate)
+            
+            if (calculateDate(new Date(today.toDateString()), rev) <= 0) {
                 var today = new Date();
-                var submitDate = new Date(element.unformatedSubmitDate)
+                var rev = new Date(element.nextReviewDate)
+                //rev.setDate(rev.getDate() + 14)
+                //var submitDate = new Date(element.unformatedSubmitDate)
                 
                 console.log("Todays Date: " + today)
-                console.log("Submit Date: " + submitDate)
-                var minutes = calculateDate(today, submitDate)
-                if ( minutes > 120) {
-                    li.appendChild(document.createTextNode(`${element.problemId}: minutes: ${minutes}`));
-                    objectList.appendChild(li);
-                }
+                console.log("Review Date: " + rev.toDateString())
+                //var minutes = calculateDate(today, submitDate)
+            
+                li.appendChild(document.createTextNode(`${element.problemId}: Review Date: ${rev.toDateString()}`));
+                objectList.appendChild(li);
+                
             }    
         });
     });
@@ -36,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         completedProblemList.forEach((element, index) => {
             console.log(element.problemId);
-            if (element.problemId && element.difficulty) {
+            if (element.problemId) {
                 const li = document.createElement('li');
                 // Create a clickable link for the problem ID
                 const a = document.createElement('a');
@@ -55,6 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Listen for clear history button click and send message to background script to clear problem history
   document.getElementById('clearHistory').addEventListener('click', () => {handleClearHisotry()});
+  document.getElementById('test').addEventListener('click', () => {handleTest()});
+
+  function handleTest() {
+    chrome.runtime.sendMessage({ action: 'test'});
+  }
 
   function handleClearHisotry() {
     chrome.runtime.sendMessage({ action: 'clear'});
@@ -62,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function calculateDate(today, submitDate) {
-    let difference_in_time = today.getTime() - submitDate.getTime();
-    console.log("Time difference: " + (difference_in_time / 1000) / 60)
-    return (difference_in_time / 1000) / 60
+    let difference_in_time = submitDate.getTime() - today.getTime();
+    let difference_in_days = (difference_in_time / (1000 * 3600 * 24));
+
+    console.log("Total number of days between dates: " + today.toDateString() + " and " + submitDate.toDateString() +": " + difference_in_days + " days");
+    return difference_in_days
   }
