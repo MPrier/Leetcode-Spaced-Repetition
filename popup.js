@@ -11,15 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             var today = new Date();
             var rev = new Date(element.nextReviewDate)
+            console.log("rev: " + rev)
             
             if (calculateDate(new Date(today.toDateString()), rev) <= 0) {
                 var today = new Date();
                 var rev = new Date(element.nextReviewDate)
+
                 //rev.setDate(rev.getDate() + 14)
                 //var submitDate = new Date(element.unformatedSubmitDate)
                 
-                console.log("Todays Date: " + today)
-                console.log("Review Date: " + rev.toDateString())
+               // console.log("Todays Date: " + today)
+                //console.log("Review Date: " + rev.toDateString())
                 //var minutes = calculateDate(today, submitDate)
             
                 li.appendChild(document.createTextNode(`${element.problemId}: Review Date: ${rev.toDateString()}`));
@@ -40,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
 
         completedProblemList.forEach((element, index) => {
-            console.log(element.problemId);
             if (element.problemId) {
                 const li = document.createElement('li');
                 // Create a clickable link for the problem ID
@@ -48,10 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 a.href = `https://leetcode.com/problems/${element.problemId}`;
                 a.textContent = `Problem ID: ${element.problemId}`;
                 a.target = "_blank"; // Open link in a new tab
+                var rev = new Date(element.nextReviewDate)
 
                 li.appendChild(a);
-                li.appendChild(document.createTextNode(`, Difficulty: ${element.difficulty}`));
-                li.appendChild(document.createTextNode(`, Date: ${element.formatedSubmitDate}`));
+                li.appendChild(document.createTextNode(`, Repitition: ${element.repetitions}`));
+                li.appendChild(document.createTextNode(`, Next Review Date: ${rev.toDateString()}`));
+                li.appendChild(document.createTextNode(`, Interval: ${element.interval}`));
+                li.appendChild(document.createTextNode(`, Ease Factor: ${element.eFactor}`));
                 objectList.appendChild(li);
             }
         });
